@@ -89,10 +89,16 @@ class $modify(FPTPlayLayer, PlayLayer) {
 				sec << '.' << std::setw(2) << msTime;
 		}
 		
-		
-		int numDigits = std::regex_replace(oss.str(), std::regex(R"([\D])"), "").length() + 1;
+		std::string labelString = oss.str();
+		if (Mod::get()->getSettingValue<bool>("remove-ms")) {
+			labelString = labelString.substr(0, labelString.size() - 3);
+		}
+		double numDigits = std::regex_replace(labelString, std::regex(R"([\D])"), "").length() + 1;
+		if (Mod::get()->getSettingValue<bool>("remove-ms")) {
+			numDigits = numDigits - 0.5;
+		}
 		float offset = numDigits * 5.f;
-		m_fields->m_timeLabel->setString(oss.str().c_str());
+		m_fields->m_timeLabel->setString(labelString.c_str());
 		m_fields->m_timeLabel->setPositionX((this->getContentSize().width / 2) - offset);
 	}
 };

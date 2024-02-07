@@ -1,6 +1,6 @@
 {
 	"geode": "2.0.0",
-	"version": "v1.1.0",
+	"version": "v1.1.1",
 	"gd": "2.204",
 	"id": "itzkiba.formatted_platformer_time",
 	"name": "Formatted Platformer Time",
@@ -14,6 +14,11 @@
 			"default": false,
 			"description": "All unused slots in the timer will be filled with zeros.\n\nFor example, a time of <cg>1:09</c> will display as <cg>0:01:09.00</c>."
 		},
+		"remove-ms": {
+			"name": "Remove Milliseconds",
+			"type": "bool",
+			"default": false
+		},
 		"rainbow-mode": {
 			"name": "Rainbow Timer",
 			"type": "bool",
@@ -25,7 +30,7 @@
 			"default": 1.0,
 			"min": 0.1,
 			"max": 10,
-			"description": "Changes the hue shift speed of the rainbow timer.\n\n<cg>Lower values = Faster hue shifts</c>"
+			"description": "Changes the hue shift speed of the rainbow timer.\n\n<cg>Lower values = Faster hue shifts</c>."
 		}
 	}
 }
