@@ -3,18 +3,19 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
+#include <regex>
 
 using namespace geode::prelude;
-
-float offset = 80.f;
 
 class $modify(FPTPlayLayer, PlayLayer) {
 
 	CCLabelBMFont* m_timeLabel = nullptr;
-	float m_xContentSize;
 
 	void updateProgressbar() {
 		PlayLayer::updateProgressbar();
+		if (!m_level->isPlatformer()) {
+			return;
+		}
 		// Finding the progress label and storing it
 		if (m_fields->m_timeLabel == nullptr) {
 			
@@ -36,8 +37,6 @@ class $modify(FPTPlayLayer, PlayLayer) {
 						if (Mod::get()->getSettingValue<bool>("rainbow-mode")) {
 							m_fields->m_timeLabel->runAction(rseq);
 						}
-						m_fields->m_xContentSize = newLabel->getContentSize().width + offset;
-						newLabel->setAlignment(CCTextAlignment::kCCTextAlignmentCenter);
 						break;
 					}
 				}
@@ -57,6 +56,7 @@ class $modify(FPTPlayLayer, PlayLayer) {
 		}
 
 		int labelTime = p0;
+		int msTime = p1;
 		
 		int hr = static_cast<int>(labelTime / 3600);
 		labelTime -= (hr * 3600);
@@ -67,12 +67,32 @@ class $modify(FPTPlayLayer, PlayLayer) {
 		int sec = labelTime;
 
 		std::stringstream oss;
-		oss << hr << ':' << std::setfill('0') << std::setw(2) << min << ':' << std::setw(2) << sec << '.' << std::setw(2) << p1;
-		m_fields->m_timeLabel->setAnchorPoint({0.5, 0.5});
-		m_fields->m_timeLabel->setPositionX((this->getContentSize().width * 0.5f));
-		m_fields->m_timeLabel->setString(oss.str().c_str());
-		m_fields->m_timeLabel->updateLabel();
-		m_fields->m_timeLabel->setContentSize({m_fields->m_xContentSize, m_fields->m_timeLabel->getContentSize().height});
+
+		if (!Mod::get()->getSettingValue<bool>("show-all")) {
+			if (hr > 0) {
+				oss <<
+				hr << ':' << std::setfill('0') << std::setw(2) <<
+				min << ':' << std::setw(2) <<
+				sec << '.' << std::setw(2) << msTime;
+			} else if (min > 0) {
+				oss << std::setfill('0') <<
+				min << ':' << std::setw(2) <<
+				sec << '.' << std::setw(2) << msTime;
+			} else {
+				oss << std::setfill('0') <<
+				sec << '.' << std::setw(2) << msTime;
+			}
+		} else {
+			oss <<
+				hr << ':' << std::setfill('0') << std::setw(2) <<
+				min << ':' << std::setw(2) <<
+				sec << '.' << std::setw(2) << msTime;
+		}
 		
+		
+		int numDigits = std::regex_replace(oss.str(), std::regex(R"([\D])"), "").length() + 1;
+		float offset = numDigits * 5.f;
+		m_fields->m_timeLabel->setString(oss.str().c_str());
+		m_fields->m_timeLabel->setPositionX((this->getContentSize().width / 2) - offset);
 	}
 };
