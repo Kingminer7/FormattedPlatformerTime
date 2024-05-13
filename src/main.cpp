@@ -13,7 +13,7 @@ class $modify(FPTPlayLayer, PlayLayer) {
 
 	void updateProgressbar() {
 		PlayLayer::updateProgressbar();
-		if (!m_level->isPlatformer()) {
+		if (!m_level->isPlatformer() || !Mod::get()->getSettingValue<bool>("rainbow-mode")) {
 			return;
 		}
 		// Finding the progress label and storing it
@@ -29,17 +29,9 @@ class $modify(FPTPlayLayer, PlayLayer) {
 			auto seq = CCSequence::create(tint1, tint2, tint3, tint4, tint5, tint6, nullptr);
 			auto rseq = CCRepeatForever::create(seq);
 
-			CCObject* search;
-			CCARRAY_FOREACH(this->getChildren(), search) {
-				if (auto newLabel = dynamic_cast<CCLabelBMFont*>(search)) {
-					if (std::strlen(newLabel->getString()) < 10) {
-						m_fields->m_timeLabel = newLabel;
-						if (Mod::get()->getSettingValue<bool>("rainbow-mode")) {
-							m_fields->m_timeLabel->runAction(rseq);
-						}
-						break;
-					}
-				}
+			if (auto newLabel = this->getChildByID("time-label")) {
+				m_fields->m_timeLabel = newLabel;
+				m_fields->m_timeLabel->runAction(rseq);
 			}
 		}
 	}
