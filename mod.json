@@ -3,7 +3,7 @@
 	"version": "v1.2.0",
 	"gd": {
 		"win": "2.204",
-		"mac": "2.204",
+		"mac": "2.200",
 		"android": "2.205"
 	},
 	"id": "itzkiba.formatted_platformer_time",
