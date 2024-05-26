@@ -1,3 +1,10 @@
+# v1.2.0
+
+* Finds the proper node to treat as the platformer time
+* Added Node IDs dependency
+* Increased minimum Geode version to 2.0.0-beta.27
+* Add macOS support
+
 # v1.1.1
 
 * Added new setting "Remove Milliseconds."

@@ -1,4 +1,3 @@
-#include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <sstream>
 #include <iostream>
@@ -8,9 +7,9 @@
 using namespace geode::prelude;
 
 class $modify(FPTPlayLayer, PlayLayer) {
-
-	CCLabelBMFont* m_timeLabel = nullptr;
-
+	struct Fields {
+		CCLabelBMFont* m_timeLabel = nullptr;
+	};
 	void updateProgressbar() {
 		PlayLayer::updateProgressbar();
 		if (!m_level->isPlatformer() || !Mod::get()->getSettingValue<bool>("rainbow-mode")) {
@@ -29,7 +28,7 @@ class $modify(FPTPlayLayer, PlayLayer) {
 			auto seq = CCSequence::create(tint1, tint2, tint3, tint4, tint5, tint6, nullptr);
 			auto rseq = CCRepeatForever::create(seq);
 
-			if (auto newLabel = this->getChildByID("time-label")) {
+			if (auto newLabel = typeinfo_cast<CCLabelBMFont*>(this->getChildByID("time-label"))) {
 				m_fields->m_timeLabel = newLabel;
 				m_fields->m_timeLabel->runAction(rseq);
 			}
@@ -50,11 +49,11 @@ class $modify(FPTPlayLayer, PlayLayer) {
 		int labelTime = p0;
 		int msTime = p1;
 		
-		int hr = static_cast<int>(labelTime / 3600);
-		labelTime -= (hr * 3600);
+		int hr = labelTime / 3600;
+		labelTime -= hr * 3600;
 
-		int min = static_cast<int>(labelTime / 60);
-		labelTime -= (min * 60);
+		int min = labelTime / 60;
+		labelTime -= min * 60;
 
 		int sec = labelTime;
 
