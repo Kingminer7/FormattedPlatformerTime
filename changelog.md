@@ -2,7 +2,7 @@
 
 * Finds the proper node to treat as the platformer time
 * Added Node IDs dependency
-* Increased minimum Geode version to 2.0.0-beta.27
+* Increased minimum Geode version to 3.7.1
 * Add macOS support
 
 # v1.1.1
